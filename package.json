@@ -27,7 +27,8 @@
     "prerender-node": "~0.1.15"
   },
   "devDependencies": {
-    "gulp-livereload": "~1.0.1"
+    "gulp-livereload": "~1.0.1",
+    "sugar": "~1.4.1"
   },
   "napa": {}
 }

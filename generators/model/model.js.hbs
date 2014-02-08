@@ -1,0 +1,8 @@
+var connection = require('./index');
+var Schema = require('mongoose').Schema;
+
+var schema = new Schema({
+
+});
+
+module.exports = connection.model('{{uppercamelize name}}', schema);

@@ -1,0 +1,10 @@
+{
+  "description": "Mongoose model",
+  "files": [
+    {
+      "from": "model.js.hbs",
+      "to": "server/models/{{dasherize name}}.js"
+    }
+  ],
+  "dependencies": []
+}
