@@ -38,7 +38,7 @@ gulp.task('browserify', function() {
   return gulp
   .src('client/index.js', {read: false})
   .pipe(plumber())
-  .pipe(browserify({debug: !production}))
+  .pipe(browserify({debug: !production, transform: ['envify']}))
   .pipe(gulpif(production, uglify()))
   .pipe(gulp.dest(config.public))
   .pipe(gulpif(!production, livereload()));
