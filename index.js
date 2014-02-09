@@ -1,3 +1,5 @@
+'use strict';
+
 var http = require('http');
 var app = require('./server');
 var gulp = require('./gulpfile');

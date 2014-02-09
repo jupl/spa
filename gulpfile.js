@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = module.exports = require('gulp');
 var config = require('./config');
 

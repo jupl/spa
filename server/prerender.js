@@ -1,3 +1,5 @@
+'use strict';
+
 var middleware = require('prerender-node');
 
 /**
