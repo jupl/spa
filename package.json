@@ -1,7 +1,7 @@
 {
   "repository": "git",
   "scripts": {
-    "start": "npm install --production && node index",
+    "start": "npm install --production && NODE_ENV=production node index",
     "install": "napa"
   },
   "dependencies": {

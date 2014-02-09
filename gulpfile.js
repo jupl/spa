@@ -8,14 +8,14 @@ var concat = require('gulp-concat');
 var csso = require('gulp-csso');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
-var livereload = function() {};
+var livereload = require('gulp-plumber'); // Placeholder for non-production
 var plumber = require('gulp-plumber');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 
 // Check for production
-var production = gutil.env.production || (gutil.env.NODE_ENV === 'production');
+var production = gutil.env.production || (process.env.NODE_ENV === 'production');
 
 // Set up live reload if available
 try {
