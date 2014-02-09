@@ -46,7 +46,7 @@ gulp.task('browserify', function() {
 
 gulp.task('clean', function() {
   return gulp
-  .src(config.public + '/**/*', {read: false})
+  .src(config.public + '/*', {read: false})
   .pipe(rimraf());
 });
 
