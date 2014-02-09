@@ -1,10 +1,12 @@
 var passport = require('passport');
-var User = require('../models/user');
-var strategies = [
-  require('./local')
-];
 
 module.exports = function(app) {
+  // Load user model and strategies
+  var User = require('../models/user');
+  var strategies = [
+    require('./local')
+  ];
+
   // Hook in with user model
   passport.serializeUser(function(user, done) {
     done(null, user.id);

@@ -1,13 +1,11 @@
 var express = require('express');
 var path = require('path');
 var config = require('../config');
-var connectMongo = require('connect-mongo');
 var setupPassport = require('./passport');
 var setupPrerender = require('./prerender');
 var setupRoutes = require('./routes');
 var setupSessions = require('./sessions');
 var app = module.exports = express();
-var MongoStore = connectMongo(express);
 
 // Add middleware
 if(process.env.NODE_ENV === 'development') {
