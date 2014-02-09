@@ -10,7 +10,7 @@ var setupSessions = require('./sessions');
 var app = module.exports = express();
 
 // Add middleware
-if(process.env.NODE_ENV === 'development') {
+if(process.env.NODE_ENV !== 'production') {
   app.use(express.logger('dev'));
 }
 app.use(express.compress());
