@@ -3,29 +3,21 @@
 var gulp = module.exports = require('gulp');
 var config = require('./config');
 
-// Gulp plugins
+// Check for production
+var production = require('gulp-util').env.production;
+production = production || (process.env.NODE_ENV === 'production');
+
+// Gulp plugins. For production, livereload is set to a placeholder.
 var autoprefixer = require('gulp-autoprefixer');
 var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var csso = require('gulp-csso');
 var gulpif = require('gulp-if');
-var gutil = require('gulp-util');
-var livereload = require('gulp-plumber'); // Placeholder for non-production
+var livereload = require(production ? 'gulp-plumber' : 'gulp-livereload');
 var plumber = require('gulp-plumber');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
-
-// Check for production
-var production = gutil.env.production || (process.env.NODE_ENV === 'production');
-
-// Set up live reload if available
-try {
-  if(!production) {
-    livereload = require('gulp-livereload');
-  }
-}
-catch(e) {}
 
 gulp.task('assets', function() {
   return gulp
@@ -36,7 +28,7 @@ gulp.task('assets', function() {
 
 gulp.task('browserify', function() {
   return gulp
-  .src('client/index.js', {read: false})
+  .src('client/*.js', {read: false})
   .pipe(plumber())
   .pipe(browserify({debug: !production, transform: ['envify']}))
   .pipe(gulpif(production, uglify()))
@@ -52,7 +44,7 @@ gulp.task('clean', function() {
 
 gulp.task('stylesheets', function() {
   return gulp
-  .src('client/index.scss')
+  .src('client/*.scss')
   .pipe(plumber())
   .pipe(sass())
   .pipe(autoprefixer())
