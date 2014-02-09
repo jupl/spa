@@ -46,7 +46,7 @@ gulp.task('browserify', function() {
 
 gulp.task('clean', function() {
   return gulp
-  .src(config.public, {read: false})
+  .src(config.public + '/**/*', {read: false})
   .pipe(rimraf());
 });
 
@@ -63,10 +63,10 @@ gulp.task('stylesheets', function() {
 
 gulp.task('default', [
   'clean',
+  'watch',
   'assets',
   'stylesheets',
-  'browserify',
-  'watch'
+  'browserify'
 ]);
 
 gulp.task('watch', function() {
