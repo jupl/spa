@@ -7,17 +7,19 @@ var config = require('./config');
 var production = require('gulp-util').env.production;
 production = production || (process.env.NODE_ENV === 'production');
 
-// Gulp plugins. For production, livereload is set to a placeholder.
+// Gulp plugins
 var autoprefixer = require('gulp-autoprefixer');
 var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var csso = require('gulp-csso');
 var gulpif = require('gulp-if');
-var livereload = require(production ? 'gulp-plumber' : 'gulp-livereload');
 var plumber = require('gulp-plumber');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
+
+// If in production, use a placeholder plugin for LiveReload
+var livereload = require(production ? 'gulp-plumber' : 'gulp-livereload');
 
 gulp.task('assets', function() {
   return gulp
