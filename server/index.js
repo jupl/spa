@@ -1,30 +1,32 @@
 'use strict';
 
 var express = require('express');
+var http = require('http');
 var path = require('path');
+var app = express();
 var config = require('../config');
 var setupPassport = require('./passport');
 var setupPrerender = require('./prerender');
 var setupRoutes = require('./routes');
-var setupSessions = require('./sessions');
-var app = module.exports = express();
+var setupSession = require('./session');
+
+module.exports = http.createServer(app);
 
 // Add middleware
-if(process.env.NODE_ENV !== 'production') {
+if(config.production) {
   app.use(express.logger('dev'));
 }
 app.use(express.compress());
 // setupPrerender(app);
-app.use(express.static(config.public));
+app.use(express.static(config.paths.public));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.cookieParser());
-setupSessions(app);
+setupSession(app);
 setupPassport(app);
 setupRoutes(app);
 
 // Support for HTML5 pushState
-var index = path.resolve(config.public, 'index.html');
 app.get('*', function(request, response) {
-  response.sendfile(index);
+  response.sendfile(config.paths.pushState);
 });

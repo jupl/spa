@@ -1,8 +1,11 @@
 'use strict';
 
-var http = require('http');
-var app = require('./server');
+var config = require('./config');
 var gulp = require('./gulpfile');
+var server = require('./server');
 
+// Start Gulp and server
 gulp.start('default');
-http.createServer(app).listen(8000);
+server.listen(config.server.port, function() {
+  console.log('Server started on port', config.server.port);
+});

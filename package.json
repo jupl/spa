@@ -19,13 +19,12 @@
     "gulp-rimraf": "~0.0.9",
     "gulp-sass": "~0.6.0",
     "gulp-watch": "~0.5.0",
-    "gulp-uglify": "~0.2.0",
-    "gulp-util": "~2.2.14",
     "napa": "~0.3.0",
     "mongoose": "~3.8.6",
     "passport": "~0.2.0",
     "passport-local": "~0.1.6",
-    "prerender-node": "~0.1.15"
+    "prerender-node": "~0.1.15",
+    "uglifyify": "~1.2.1"
   },
   "devDependencies": {
     "gulp-livereload": "~1.0.1",

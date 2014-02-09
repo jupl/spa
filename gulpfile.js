@@ -3,9 +3,12 @@
 var gulp = module.exports = require('gulp');
 var config = require('./config');
 
-// Check for production
-var production = require('gulp-util').env.production;
-production = production || (process.env.NODE_ENV === 'production');
+// Environment-specific configurations
+var livereloadPackage = config.production ? 'gulp-plumber' : 'gulp-livereload';
+var browserifyTransform = ['envify'];
+if(config.production) {
+  browserifyTransform.push('uglifyify');
+}
 
 // Gulp plugins
 var autoprefixer = require('gulp-autoprefixer');
@@ -13,46 +16,45 @@ var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var csso = require('gulp-csso');
 var gulpif = require('gulp-if');
+var livereload = require(livereloadPackage);
 var plumber = require('gulp-plumber');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
-var uglify = require('gulp-uglify');
-
-// If in production, use a placeholder plugin for LiveReload
-var livereload = require(production ? 'gulp-plumber' : 'gulp-livereload');
 
 gulp.task('assets', function() {
   return gulp
   .src('client/assets/**/*')
-  .pipe(gulp.dest(config.public))
-  .pipe(gulpif(!production, livereload()));
+  .pipe(gulp.dest(config.paths.public))
+  .pipe(gulpif(!config.production, livereload()));
 });
 
 gulp.task('browserify', function() {
   return gulp
-  .src('client/*.js', {read: false})
+  .src(['client/*.js', '!client/_*'], {read: false})
   .pipe(plumber())
-  .pipe(browserify({debug: !production, transform: ['envify']}))
-  .pipe(gulpif(production, uglify()))
-  .pipe(gulp.dest(config.public))
-  .pipe(gulpif(!production, livereload()));
+  .pipe(browserify({
+    debug: !config.production,
+    transform: browserifyTransform
+  }))
+  .pipe(gulp.dest(config.paths.public))
+  .pipe(gulpif(!config.production, livereload()));
 });
 
 gulp.task('clean', function() {
   return gulp
-  .src(config.public + '/*', {read: false})
+  .src(config.paths.public + '/*', {read: false})
   .pipe(rimraf());
 });
 
 gulp.task('stylesheets', function() {
   return gulp
-  .src('client/*.scss')
+  .src(['client/*.scss', '!client/_*'])
   .pipe(plumber())
   .pipe(sass())
   .pipe(autoprefixer())
-  .pipe(gulpif(production, csso()))
-  .pipe(gulp.dest(config.public))
-  .pipe(gulpif(!production, livereload()));
+  .pipe(gulpif(config.production, csso()))
+  .pipe(gulp.dest(config.paths.public))
+  .pipe(gulpif(!config.production, livereload()));
 });
 
 gulp.task('default', [
