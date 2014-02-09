@@ -29,7 +29,7 @@ catch(e) {}
 
 gulp.task('assets', function() {
   return gulp
-  .src('client/assets/*')
+  .src('client/assets/**/*')
   .pipe(gulp.dest(config.public))
   .pipe(gulpif(!production, livereload()));
 });
@@ -70,7 +70,7 @@ gulp.task('default', [
 ]);
 
 gulp.task('watch', function() {
-  gulp.watch('client/assets/*', ['assets']);
-  gulp.watch(['client/**/*.js', '!client/assets/*'], ['browserify']);
-  gulp.watch(['client/**/*.{css,scss}', '!client/assets/*'], ['stylesheets']);
+  gulp.watch('client/assets/**/*', ['assets']);
+  gulp.watch(['client/**/*.js', '!client/assets/**/*'], ['browserify']);
+  gulp.watch(['client/**/*.{s,}css', '!client/assets/**/*'], ['stylesheets']);
 });
