@@ -2,6 +2,7 @@
   "repository": "git",
   "scripts": {
     "start": "npm install --production && NODE_ENV=production node index",
+    "test": "karma start --no-auto-watch",
     "install": "napa"
   },
   "dependencies": {
@@ -28,6 +29,10 @@
   },
   "devDependencies": {
     "gulp-livereload": "~1.0.1",
+    "karma-browserify": "~0.0.6",
+    "karma-chai-plugins": "~0.2.0",
+    "karma-detect-browsers": "~0.1.2",
+    "karma-mocha": "~0.1.1",
     "sugar": "~1.4.1"
   },
   "napa": {}

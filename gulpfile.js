@@ -67,6 +67,12 @@ gulp.task('default', [
 
 gulp.task('watch', function() {
   gulp.watch('client/assets/**/*', ['assets']);
-  gulp.watch(['client/**/*.js', '!client/assets/**/*'], ['browserify']);
-  gulp.watch(['client/**/*.{s,}css', '!client/assets/**/*'], ['stylesheets']);
+  gulp.watch([
+    'client/**/*.js',
+    '!client/{assets,tests}/**/*'
+  ], ['browserify']);
+  gulp.watch([
+    'client/**/*.{s,}css',
+    '!client/{assets,tests}/**/*'
+  ], ['stylesheets']);
 });
