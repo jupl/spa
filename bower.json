@@ -1,0 +1,6 @@
+{
+  "name": "package-name",
+  "dependencies": {
+    "normalize-scss": "~2.1.3"
+  }
+}

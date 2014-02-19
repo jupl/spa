@@ -1,6 +1,7 @@
-module.exports = function(config) {
-  config.set({
-    autoWatch: true,
+var config = require('./config');
+
+module.exports = function(karmaConfig) {
+  karmaConfig.set({
     frameworks: [
       'mocha',
       'chai',
@@ -11,7 +12,7 @@ module.exports = function(config) {
     files: ['client/tests/*-test.js'],
     preprocessors: {'client/tests/*-test.js': ['browserify']},
     browserify: {
-      transform: ['envify'],
+      transform: config.browserify.transforms,
       watch: true,
       debug: true
     }
