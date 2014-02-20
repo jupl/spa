@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var path = require('path');
 var config = require('./config');
 var runServer = false;
+var useLivereload = false;
 var watchFiles = false;
 
 // Set up Browserify transform modules
@@ -18,6 +19,7 @@ var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var csso = require('gulp-csso');
 var gulpif = require('gulp-if');
+var livereload = require('gulp-plumber');
 var plumber = require('gulp-plumber');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
@@ -47,18 +49,16 @@ gulp.task('clean', function() {
 
 // TODO: Handle processing HTML, images, JSON, etc.
 gulp.task('build:assets', function() {
-  var livereload = require(runServer ? 'gulp-livereload' : 'gulp-plumber');
   return gulp
   .src('client/assets/**/*')
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(runServer, livereload()));
+  .pipe(gulpif(useLivereload, livereload()));
 });
 
 gulp.task('build:css', function() {
-  var livereload = require(runServer ? 'gulp-livereload' : 'gulp-plumber');
   return gulp
   .src(['client/*.scss', '!**/_*'])
-  .pipe(plumber())
+  .pipe(gulpif(watchFiles, plumber()))
   .pipe(sass({
     imagePath: './images',
     errLogToConsole: watchFiles,
@@ -67,17 +67,16 @@ gulp.task('build:css', function() {
   .pipe(autoprefixer())
   .pipe(gulpif(config.production, csso()))
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(runServer, livereload()));
+  .pipe(gulpif(useLivereload, livereload()));
 });
 
 gulp.task('build:js', function() {
-  var livereload = require(runServer ? 'gulp-livereload' : 'gulp-plumber');
   return gulp
   .src(['client/*.js', '!**/_*'], {read: false})
-  .pipe(plumber())
+  .pipe(gulpif(watchFiles, plumber()))
   .pipe(browserify({debug: !config.production, transform: transforms}))
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(runServer, livereload()));
+  .pipe(gulpif(useLivereload, livereload()));
 });
 
 gulp.task('watch:setup', function() {
@@ -86,4 +85,8 @@ gulp.task('watch:setup', function() {
 
 gulp.task('server:setup', function() {
   runServer = true;
+  if(!config.production) {
+    useLivereload = true;
+    livereload = require('gulp-livereload');
+  }
 });
