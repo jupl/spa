@@ -46,7 +46,7 @@ gulp.task('clean', function() {
 
 // TODO: Handle processing HTML, images, JSON, etc.
 gulp.task('build:assets', function() {
-  var livereload = require(runServer ? 'gulp-plumber' : 'gulp-livereload');
+  var livereload = require(runServer ? 'gulp-livereload' : 'gulp-plumber');
   return gulp
   .src('client/assets/**/*')
   .pipe(gulp.dest(config.paths.public))
@@ -54,7 +54,7 @@ gulp.task('build:assets', function() {
 });
 
 gulp.task('build:css', function() {
-  var livereload = require(runServer ? 'gulp-plumber' : 'gulp-livereload');
+  var livereload = require(runServer ? 'gulp-livereload' : 'gulp-plumber');
   return gulp
   .src(['client/*.scss', '!**/_*'])
   .pipe(plumber())
@@ -69,7 +69,7 @@ gulp.task('build:css', function() {
 });
 
 gulp.task('build:js', function() {
-  var livereload = require(runServer ? 'gulp-plumber' : 'gulp-livereload');
+  var livereload = require(runServer ? 'gulp-livereload' : 'gulp-plumber');
   return gulp
   .src(['client/*.js', '!**/_*'], {read: false})
   .pipe(plumber())
