@@ -17,7 +17,6 @@ var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var csso = require('gulp-csso');
 var gulpif = require('gulp-if');
-var livereload = require(config.production ? 'gulp-plumber' : 'gulp-livereload');
 var plumber = require('gulp-plumber');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
@@ -47,6 +46,7 @@ gulp.task('clean', function() {
 
 // TODO: Handle processing HTML, images, JSON, etc.
 gulp.task('build:assets', function() {
+  var livereload = require(runServer ? 'gulp-plumber' : 'gulp-livereload');
   return gulp
   .src('client/assets/**/*')
   .pipe(gulp.dest(config.paths.public))
@@ -54,10 +54,14 @@ gulp.task('build:assets', function() {
 });
 
 gulp.task('build:css', function() {
+  var livereload = require(runServer ? 'gulp-plumber' : 'gulp-livereload');
   return gulp
   .src(['client/*.scss', '!**/_*'])
   .pipe(plumber())
-  .pipe(sass({imagePath: './images', sourceComments: config.production ? '' : 'map'}))
+  .pipe(sass({
+    imagePath: './images',
+    sourceComments: config.production ? '' : 'map'
+  }))
   .pipe(autoprefixer())
   .pipe(gulpif(config.production, csso()))
   .pipe(gulp.dest(config.paths.public))
@@ -65,6 +69,7 @@ gulp.task('build:css', function() {
 });
 
 gulp.task('build:js', function() {
+  var livereload = require(runServer ? 'gulp-plumber' : 'gulp-livereload');
   return gulp
   .src(['client/*.js', '!**/_*'], {read: false})
   .pipe(plumber())
