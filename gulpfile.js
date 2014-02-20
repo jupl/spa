@@ -4,6 +4,7 @@ var gulp = require('gulp');
 var path = require('path');
 var config = require('./config');
 var runServer = false;
+var watchFiles = false;
 
 // Set up Browserify transform modules
 var transforms = config.browserify.transforms.slice();
@@ -28,7 +29,7 @@ gulp.task('build', [
   'build:js'
 ]);
 
-gulp.task('watch', ['build'], function() {
+gulp.task('watch', ['watch:setup', 'build'], function() {
   gulp.watch('client/assets/**/*', ['build:assets']);
   gulp.watch('client/**/*.scss', ['build:css']);
   gulp.watch(['client/**/*.js', '!client/{assets,tests}/**/*'], ['build:js']);
@@ -60,6 +61,7 @@ gulp.task('build:css', function() {
   .pipe(plumber())
   .pipe(sass({
     imagePath: './images',
+    errLogToConsole: watchFiles,
     sourceComments: config.production ? '' : 'map'
   }))
   .pipe(autoprefixer())
@@ -76,6 +78,10 @@ gulp.task('build:js', function() {
   .pipe(browserify({debug: !config.production, transform: transforms}))
   .pipe(gulp.dest(config.paths.public))
   .pipe(gulpif(runServer, livereload()));
+});
+
+gulp.task('watch:setup', function() {
+  watchFiles = true;
 });
 
 gulp.task('server:setup', function() {
