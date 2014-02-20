@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var path = require('path');
 var config = require('./config');
+var runServer = false;
 
 // Set up Browserify transform modules
 var transforms = config.browserify.transforms.slice();
@@ -21,6 +22,23 @@ var plumber = require('gulp-plumber');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
 
+gulp.task('build', [
+  'clean',
+  'build:assets',
+  'build:css',
+  'build:js'
+]);
+
+gulp.task('watch', ['build'], function() {
+  gulp.watch('client/assets/**/*', ['build:assets']);
+  gulp.watch('client/**/*.scss', ['build:css']);
+  gulp.watch(['client/**/*.js', '!client/{assets,tests}/**/*'], ['build:js']);
+});
+
+gulp.task('server', ['server:setup', 'watch'], function() {
+  require('./server').listen(config.ports.server);
+});
+
 gulp.task('clean', function() {
   return gulp
   .src(path.join(config.paths.public, '*'), {read: false})
@@ -32,7 +50,7 @@ gulp.task('build:assets', function() {
   return gulp
   .src('client/assets/**/*')
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(!config.production, livereload()));
+  .pipe(gulpif(runServer, livereload()));
 });
 
 gulp.task('build:css', function() {
@@ -43,7 +61,7 @@ gulp.task('build:css', function() {
   .pipe(autoprefixer())
   .pipe(gulpif(config.production, csso()))
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(!config.production, livereload()));
+  .pipe(gulpif(runServer, livereload()));
 });
 
 gulp.task('build:js', function() {
@@ -52,19 +70,9 @@ gulp.task('build:js', function() {
   .pipe(plumber())
   .pipe(browserify({debug: !config.production, transform: transforms}))
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(!config.production, livereload()));
+  .pipe(gulpif(runServer, livereload()));
 });
 
-gulp.task('watch', function() {
-  gulp.watch('client/assets/**/*', ['build:assets']);
-  gulp.watch('client/**/*.scss', ['build:css']);
-  gulp.watch(['client/**/*.js', '!client/{assets,tests}/**/*'], ['build:js']);
+gulp.task('server:setup', function() {
+  runServer = true;
 });
-
-gulp.task('default', [
-  'clean',
-  'watch',
-  'build:assets',
-  'build:css',
-  'build:js'
-]);

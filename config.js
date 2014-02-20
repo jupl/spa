@@ -7,6 +7,9 @@ module.exports = {
   paths: {
     public: path.resolve(__dirname, 'public')
   },
+  ports: {
+    server: process.env.PORT || 8000
+  },
   browserify: {
     transforms: ['envify', 'debowerify']
   }

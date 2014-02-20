@@ -1,8 +1,17 @@
 {
   "repository": "git",
   "scripts": {
-    "start": "npm install --production && NODE_ENV=production node index",
-    "test": "npm install && karma start --no-auto-watch --single-run"
+    "start": "npm install --production && npm run server:prod",
+    "test": "npm install && npm run karma:once",
+    "bower": "bower install --allow-root",
+    "build:dev": "npm run bower && gulp build",
+    "build:prod": "NODE_ENV=production npm run build:dev",
+    "watch:dev": "npm run bower && gulp watch",
+    "watch:prod": "NODE_ENV=production npm run watch:dev",
+    "server:dev": "npm run bower && gulp server",
+    "server:prod": "NODE_ENV=production npm run server:dev",
+    "karma:once": "npm run bower && karma start --no-auto-watch --single-run",
+    "karma:watch": "npm run bower && karma start --auto-watch --no-single-run"
   },
   "dependencies": {
     "bower": "~1.2.8",
@@ -14,7 +23,6 @@
     "gulp-browserify": "~0.4.2",
     "gulp-concat": "~2.1.7",
     "gulp-csso": "~0.2.3",
-    "gulp-filter": "~0.2.1",
     "gulp-if": "~0.0.5",
     "gulp-plumber": "~0.5.6",
     "gulp-rimraf": "~0.0.9",
