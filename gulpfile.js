@@ -58,7 +58,6 @@ gulp.task('build:assets', function() {
 gulp.task('build:css', function() {
   return gulp
   .src(['client/*.scss', '!**/_*'])
-  .pipe(gulpif(watchFiles, plumber()))
   .pipe(sass({
     imagePath: './images',
     errLogToConsole: watchFiles,

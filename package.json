@@ -14,10 +14,10 @@
     "karma:watch": "npm run bower && karma start --auto-watch --no-single-run"
   },
   "dependencies": {
-    "bower": "~1.2.8",
+    "aliasify": "~1.4.0",
     "debowerify": "~0.5.2",
     "envify": "~1.0.1",
-    "express": "~3.4.8",
+    "uglifyify": "~1.2.2",
     "gulp": "~3.5.2",
     "gulp-autoprefixer": "~0.0.6",
     "gulp-browserify": "~0.4.2",
@@ -27,7 +27,8 @@
     "gulp-plumber": "~0.5.6",
     "gulp-rimraf": "~0.0.9",
     "gulp-sass": "~0.7.0",
-    "uglifyify": "~1.2.2"
+    "bower": "~1.2.8",
+    "express": "~3.4.8"
   },
   "devDependencies": {
     "gulp-livereload": "~1.1.1",
@@ -36,5 +37,10 @@
     "karma-detect-browsers": "~0.1.2",
     "karma-mocha": "~0.1.1",
     "sugar": "~1.4.1"
+  },
+  "aliasify": {
+    "aliases": {
+      "client": "./client"
+    }
   }
 }

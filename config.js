@@ -9,6 +9,6 @@ module.exports = {
     server: process.env.PORT || 8000
   },
   browserify: {
-    transforms: ['envify', 'debowerify']
+    transforms: ['envify', 'aliasify', 'debowerify']
   }
 };
