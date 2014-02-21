@@ -40,7 +40,7 @@
   },
   "aliasify": {
     "aliases": {
-      "client": "./client"
+      "~": "./client"
     }
   }
 }
