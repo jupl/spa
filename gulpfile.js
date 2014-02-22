@@ -33,9 +33,9 @@ gulp.task('build', [
 ]);
 
 gulp.task('watch', ['watch:setup', 'build'], function() {
-  gulp.watch('client/assets/**/*', ['build:assets']);
+  gulp.watch('assets/**/*', ['build:assets']);
   gulp.watch('client/**/*.scss', ['build:css']);
-  gulp.watch(['client/**/*.js', '!client/{assets,tests}/**/*'], ['build:js']);
+  gulp.watch(['client/**/*.js', '!client/tests/**/*'], ['build:js']);
 });
 
 gulp.task('server', ['server:setup', 'watch'], function() {
@@ -51,7 +51,7 @@ gulp.task('clean', function() {
 // TODO: Handle processing HTML, images, JSON, etc.
 gulp.task('build:assets', function() {
   return gulp
-  .src('client/assets/**/*')
+  .src('assets/**/*')
   .pipe(gulp.dest(config.paths.public))
   .pipe((useLivereload ? livereload : noop)());
 });
