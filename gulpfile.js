@@ -5,7 +5,6 @@ var path = require('path');
 var through = require('through2');
 var config = require('./config');
 var runServer = false;
-var useLivereload = false;
 var watchFiles = false;
 
 // Set up Browserify transform modules
@@ -53,7 +52,7 @@ gulp.task('build:assets', function() {
   return gulp
   .src('assets/**/*')
   .pipe(gulp.dest(config.paths.public))
-  .pipe((useLivereload ? livereload : noop)());
+  .pipe((livereload || noop)());
 });
 
 gulp.task('build:css', function() {
@@ -62,12 +61,12 @@ gulp.task('build:css', function() {
   .pipe(sass({
     imagePath: './images',
     errLogToConsole: watchFiles,
-    sourceComments: config.production ? '' : 'map'
+    sourceComments: config.production ? 'none' : 'map'
   }))
   .pipe(autoprefixer())
   .pipe(config.production ? csso() : noop())
   .pipe(gulp.dest(config.paths.public))
-  .pipe((useLivereload ? livereload : noop)());
+  .pipe((livereload || noop)());
 });
 
 gulp.task('build:js', function() {
@@ -76,7 +75,7 @@ gulp.task('build:js', function() {
   .pipe(watchFiles ? plumber() : noop())
   .pipe(browserify({debug: !config.production, transform: transforms}))
   .pipe(gulp.dest(config.paths.public))
-  .pipe((useLivereload ? livereload : noop)());
+  .pipe((livereload || noop)());
 });
 
 gulp.task('watch:setup', function() {
@@ -86,7 +85,6 @@ gulp.task('watch:setup', function() {
 gulp.task('server:setup', function() {
   runServer = true;
   if(!config.production) {
-    useLivereload = true;
     livereload = require('gulp-livereload');
   }
 });
