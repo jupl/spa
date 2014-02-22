@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var path = require('path');
+var through = require('through2');
 var config = require('./config');
 var runServer = false;
 var useLivereload = false;
@@ -18,8 +19,8 @@ var autoprefixer = require('gulp-autoprefixer');
 var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var csso = require('gulp-csso');
-var gulpif = require('gulp-if');
-var livereload = require('gulp-plumber');
+var livereload;
+var noop = function() { return through.obj(); };
 var plumber = require('gulp-plumber');
 var rimraf = require('gulp-rimraf');
 var sass = require('gulp-sass');
@@ -52,7 +53,7 @@ gulp.task('build:assets', function() {
   return gulp
   .src('client/assets/**/*')
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(useLivereload, livereload()));
+  .pipe((useLivereload ? livereload : noop)());
 });
 
 gulp.task('build:css', function() {
@@ -64,18 +65,18 @@ gulp.task('build:css', function() {
     sourceComments: config.production ? '' : 'map'
   }))
   .pipe(autoprefixer())
-  .pipe(gulpif(config.production, csso()))
+  .pipe(config.production ? csso() : noop())
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(useLivereload, livereload()));
+  .pipe((useLivereload ? livereload : noop)());
 });
 
 gulp.task('build:js', function() {
   return gulp
   .src(['client/*.js', '!**/_*'], {read: false})
-  .pipe(gulpif(watchFiles, plumber()))
+  .pipe(watchFiles ? plumber() : noop())
   .pipe(browserify({debug: !config.production, transform: transforms}))
   .pipe(gulp.dest(config.paths.public))
-  .pipe(gulpif(useLivereload, livereload()));
+  .pipe((useLivereload ? livereload : noop)());
 });
 
 gulp.task('watch:setup', function() {
