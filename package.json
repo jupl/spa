@@ -4,7 +4,7 @@
   "dependencies": {
     "aliasify": "~1.4.0",
     "debowerify": "~0.5.2",
-    "envify": "~1.2.0",
+    "envify": "~1.2.1",
     "uglifyify": "~1.2.2",
     "gulp": "~3.5.2",
     "gulp-autoprefixer": "~0.0.6",
