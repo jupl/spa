@@ -4,7 +4,7 @@ var gulp = require('gulp');
 var path = require('path');
 var through = require('through2');
 var config = require('./config');
-var runServer = false;
+var useBrowserSync = false;
 var watchFiles = false;
 
 // Set up Browserify transform modules
@@ -37,8 +37,17 @@ gulp.task('watch', ['watch:setup', 'build'], function() {
   gulp.watch(['client/**/*.js', '!client/tests/**/*'], ['build:js']);
 });
 
-gulp.task('server', ['server:setup', 'watch'], function() {
-  require('./server').listen(config.ports.server);
+gulp.task('server', ['watch'], function() {
+  require('./server').listen(config.ports.server, function() {
+    if(!config.production) {
+      require('browser-sync').init(path.join(config.paths.public, '**/*'), {
+        proxy: {
+          host: '0.0.0.0',
+          port: config.ports.server
+        }
+      });
+    }
+  });
 });
 
 gulp.task('clean', function() {
@@ -51,8 +60,7 @@ gulp.task('clean', function() {
 gulp.task('build:assets', function() {
   return gulp
   .src('assets/**/*')
-  .pipe(gulp.dest(config.paths.public))
-  .pipe((livereload || noop)());
+  .pipe(gulp.dest(config.paths.public));
 });
 
 gulp.task('build:css', function() {
@@ -65,27 +73,18 @@ gulp.task('build:css', function() {
     sourceComments: config.production ? 'none' : 'map'
   }))
   .pipe(autoprefixer())
-  .pipe(config.production ? csso() : noop())
-  .pipe(gulp.dest(config.paths.public))
-  .pipe((livereload || noop)());
+  .pipe((config.production ? csso : noop)())
+  .pipe(gulp.dest(config.paths.public));
 });
 
 gulp.task('build:js', function() {
   return gulp
   .src(['client/*.js', '!**/_*'], {read: false})
-  .pipe(watchFiles ? plumber() : noop())
+  .pipe((watchFiles ? plumber : noop)())
   .pipe(browserify({debug: !config.production, transform: transforms}))
-  .pipe(gulp.dest(config.paths.public))
-  .pipe((livereload || noop)());
+  .pipe(gulp.dest(config.paths.public));
 });
 
 gulp.task('watch:setup', function() {
   watchFiles = true;
-});
-
-gulp.task('server:setup', function() {
-  runServer = true;
-  if(!config.production) {
-    livereload = require('gulp-livereload');
-  }
 });

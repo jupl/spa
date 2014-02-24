@@ -19,7 +19,7 @@
     "through2": "~0.4.1"
   },
   "devDependencies": {
-    "gulp-livereload": "~1.1.1",
+    "browser-sync": "~0.6.1",
     "karma-browserify": "~0.1.0",
     "karma-chai-plugins": "~0.2.0",
     "karma-detect-browsers": "~0.1.2",

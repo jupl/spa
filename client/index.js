@@ -5,5 +5,4 @@ if(process.env.NODE_ENV === 'production') {
 }
 else {
   // Development-specific code
-  document.write('<script src="//', location.hostname, ':35729/livereload.js"></script>');
 }
