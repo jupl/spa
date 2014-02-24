@@ -1,7 +1,6 @@
 'use strict';
 
 var gulp = require('gulp');
-var path = require('path');
 var through = require('through2');
 var config = require('./config');
 var useBrowserSync = false;
@@ -40,7 +39,7 @@ gulp.task('watch', ['watch:setup', 'build'], function() {
 gulp.task('server', ['watch'], function() {
   require('./server').listen(config.ports.server, function() {
     if(!config.production) {
-      require('browser-sync').init(path.join(config.paths.public, '**/*'), {
+      require('browser-sync').init(config.paths.public + '/**/*', {
         proxy: {
           host: '0.0.0.0',
           port: config.ports.server
@@ -52,7 +51,7 @@ gulp.task('server', ['watch'], function() {
 
 gulp.task('clean', function() {
   return gulp
-  .src(path.join(config.paths.public, '*'), {read: false})
+  .src(config.paths.public + '/*', {read: false})
   .pipe(rimraf());
 });
 
@@ -74,7 +73,7 @@ gulp.task('build:css', function() {
   }))
   .pipe(autoprefixer())
   .pipe((config.production ? csso : noop)())
-  .pipe(gulp.dest(path.join(config.paths.public, 'styles')));
+  .pipe(gulp.dest(config.paths.public + '/styles'));
 });
 
 gulp.task('build:js', function() {
@@ -82,7 +81,7 @@ gulp.task('build:js', function() {
   .src(['client/*.js', '!**/_*'], {read: false})
   .pipe((watchFiles ? plumber : noop)())
   .pipe(browserify({debug: !config.production, transform: transforms}))
-  .pipe(gulp.dest(path.join(config.paths.public, 'scripts')));
+  .pipe(gulp.dest(config.paths.public + '/scripts'));
 });
 
 gulp.task('watch:setup', function() {
