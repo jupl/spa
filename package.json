@@ -28,7 +28,8 @@
   },
   "aliasify": {
     "aliases": {
-      "~": "./client"
+      "bower_components": "./bower_components",
+      "client": "./client"
     }
   },
   "scripts": {

@@ -60,6 +60,7 @@ gulp.task('build:css', function() {
   .src(['client/*.scss', '!**/_*'])
   .pipe(sass({
     imagePath: './images',
+    includePath: '.',
     errLogToConsole: watchFiles,
     sourceComments: config.production ? 'none' : 'map'
   }))
