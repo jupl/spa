@@ -16,7 +16,7 @@ app.use(express.compress());
 app.use(express.static(config.paths.public));
 
 // Basic support for HTML5 pushState
-var indexPath = path.join(config.paths.public, 'index.html');
-app.get('*', function(request, response) {
-  response.sendfile(indexPath);
-});
+// var indexPath = path.join(config.paths.public, 'index.html');
+// app.get('*', function(request, response) {
+//   response.sendfile(indexPath);
+// });

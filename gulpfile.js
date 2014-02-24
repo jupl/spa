@@ -59,7 +59,7 @@ gulp.task('clean', function() {
 // TODO: Handle processing HTML, images, JSON, etc.
 gulp.task('build:assets', function() {
   return gulp
-  .src('assets/**/*')
+  .src(['assets/**/*', '!**/.*'])
   .pipe(gulp.dest(config.paths.public));
 });
 
@@ -67,14 +67,14 @@ gulp.task('build:css', function() {
   return gulp
   .src(['client/*.scss', '!**/_*'])
   .pipe(sass({
-    imagePath: './images',
+    imagePath: '../images',
     includePath: '.',
     errLogToConsole: watchFiles,
     sourceComments: config.production ? 'none' : 'map'
   }))
   .pipe(autoprefixer())
   .pipe((config.production ? csso : noop)())
-  .pipe(gulp.dest(config.paths.public));
+  .pipe(gulp.dest(path.join(config.paths.public, 'styles')));
 });
 
 gulp.task('build:js', function() {
@@ -82,7 +82,7 @@ gulp.task('build:js', function() {
   .src(['client/*.js', '!**/_*'], {read: false})
   .pipe((watchFiles ? plumber : noop)())
   .pipe(browserify({debug: !config.production, transform: transforms}))
-  .pipe(gulp.dest(config.paths.public));
+  .pipe(gulp.dest(path.join(config.paths.public, 'scripts')));
 });
 
 gulp.task('watch:setup', function() {
