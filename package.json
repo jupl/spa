@@ -31,6 +31,7 @@
   "scripts": {
     "start": "npm install --production && npm run server:prod",
     "test": "npm install --production && npm run karma:install && npm run karma:once",
+    "postinstall": "npm run bower:install",
     "bower:install": "bower install --allow-root",
     "build:dev": "npm run bower:install && gulp build",
     "build:prod": "NODE_ENV=production npm run build:dev",
