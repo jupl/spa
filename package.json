@@ -31,15 +31,15 @@
   "scripts": {
     "start": "npm install --production && npm run server:prod",
     "test": "npm install --production && npm run karma:install && npm run karma:once",
-    "bower": "bower install --allow-root",
-    "build:dev": "npm run bower && gulp build",
+    "bower:install": "bower install --allow-root",
+    "build:dev": "npm run bower:install && gulp build",
     "build:prod": "NODE_ENV=production npm run build:dev",
-    "watch:dev": "npm run bower && gulp watch",
+    "watch:dev": "npm run bower:install && gulp watch",
     "watch:prod": "NODE_ENV=production npm run watch:dev",
-    "server:dev": "npm run bower && gulp server",
+    "server:dev": "npm run bower:install && gulp server",
     "server:prod": "NODE_ENV=production npm run server:dev",
     "karma:install": "npm install karma@~0.10.9 karma-browserify@~0.1.0 karma-chai-plugins@~0.2.0 karma-detect-browsers@~0.1.2 karma-mocha@~0.1.1",
-    "karma:once": "npm run bower && karma start --no-auto-watch --single-run",
-    "karma:watch": "npm run bower && karma start --auto-watch --no-single-run"
+    "karma:once": "npm run bower:install && karma start --no-auto-watch --single-run",
+    "karma:watch": "npm run bower:install && karma start --auto-watch --no-single-run"
   }
 }
