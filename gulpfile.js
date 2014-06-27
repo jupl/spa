@@ -1,87 +1,103 @@
 'use strict';
 
+var browserSync = require('browser-sync');
+var del = require('del');
 var gulp = require('gulp');
-var through = require('through2');
+var karma = require('karma');
+var path = require('path');
+var plugin = require('gulp-load-plugins')();
+var webpack = require('webpack');
+
 var config = require('./config');
-var useBrowserSync = false;
+var karmaConfigFile = path.resolve(__dirname, 'karma.conf.js');
+var webpackConfig = require('./webpack.config');
 var watchFiles = false;
 
-// Set up Browserify transform modules
-var transforms = config.browserify.transforms.slice();
-if(config.production) {
-  transforms.push('uglifyify');
-}
-
-// Gulp plugins
-var autoprefixer = require('gulp-autoprefixer');
-var browserify = require('gulp-browserify');
-var concat = require('gulp-concat');
-var csso = require('gulp-csso');
-var livereload;
-var noop = function() { return through.obj(); };
-var plumber = require('gulp-plumber');
-var rimraf = require('gulp-rimraf');
-var sass = require('gulp-sass');
+gulp.task('bower', function() {
+  return plugin.bower();
+});
 
 gulp.task('build', [
   'clean',
   'build:assets',
-  'build:css',
-  'build:js'
+  'build:styles',
+  'build:scripts'
 ]);
 
-gulp.task('watch', ['watch:setup', 'build'], function() {
-  gulp.watch('assets/**/*', ['build:assets']);
-  gulp.watch('client/**/*.scss', ['build:css']);
-  gulp.watch(['client/**/*.js', '!client/tests/**/*'], ['build:js']);
+gulp.task('build:assets', function() {
+  return gulp
+  .src([config.source.assets + '/**/*', '!**/.*'])
+  .pipe(gulp.dest(config.destination.assets));
+})
+
+gulp.task('build:scripts', function(callback) {
+  var compiler = webpack(webpackConfig);
+
+  if(watchFiles) {
+    compiler.watch(200, webpackCallback);
+  }
+  else {
+    compiler.run(webpackCallback);
+  }
+
+  function webpackCallback(err, stats) {
+    if(err) {
+      throw new plugin.util.PluginError('build:scripts', err);
+    }
+    plugin.util.log(stats.toString({colors: true}));
+    if(callback) {
+      callback();
+      callback = null;
+    }
+  }
 });
 
-gulp.task('server', ['watch'], function() {
-  require('./server').listen(config.ports.server, function() {
-    if(!config.production) {
-      require('browser-sync').init(config.paths.public + '/**/*', {
-        proxy: {
-          host: '0.0.0.0',
-          port: config.ports.server
-        }
-      });
+gulp.task('build:styles', function() {
+  return gulp
+  .src([config.source.styles + '/*.less'])
+  .pipe(plugin.less({
+    paths: ['bower_components', config.source.styles],
+    sourceMap: !config.production
+  }))
+  .pipe(plugin.autoprefixer({map: false}))
+  .pipe((config.production ? plugin.csso : plugin.util.noop)())
+  .pipe(gulp.dest(config.destination.styles));
+});
+
+gulp.task('clean', function() {
+  del.sync(config.destination.root);
+});
+
+gulp.task('server', ['watch'], function(callback) {
+  var files = config.destination.root + '/**/*';
+  browserSync.init(null, {
+    files: files,
+    port: config.port,
+    server: {
+      baseDir: config.destination.root
+    }
+  }, callback);
+});
+
+gulp.task('unit:test', function(callback) {
+  karma.server.start({
+    singleRun: !watchFiles,
+    configFile: karmaConfigFile
+  }, function() {
+    callback();
+    if(!watchFiles) {
+      process.exit();
     }
   });
 });
 
-gulp.task('clean', function() {
-  return gulp
-  .src(config.paths.public + '/*', {read: false})
-  .pipe(rimraf());
-});
+gulp.task('unit:tdd', ['watch:setup', 'unit:test']);
 
-// TODO: Handle processing HTML, images, JSON, etc.
-gulp.task('build:assets', function() {
-  return gulp
-  .src(['assets/**/*', '!**/.*'])
-  .pipe(gulp.dest(config.paths.public));
-});
+gulp.task('unit:tdd:server', ['server', 'unit:test']);
 
-gulp.task('build:css', function() {
-  return gulp
-  .src(['client/*.scss', '!**/_*'])
-  .pipe(sass({
-    imagePath: '../images',
-    includePath: '.',
-    errLogToConsole: watchFiles,
-    sourceComments: config.production ? 'none' : 'map'
-  }))
-  .pipe(autoprefixer())
-  .pipe((config.production ? csso : noop)())
-  .pipe(gulp.dest(config.paths.public + '/styles'));
-});
-
-gulp.task('build:js', function() {
-  return gulp
-  .src(['client/*.js', '!**/_*'], {read: false})
-  .pipe((watchFiles ? plumber : noop)())
-  .pipe(browserify({debug: !config.production, transform: transforms}))
-  .pipe(gulp.dest(config.paths.public + '/scripts'));
+gulp.task('watch', ['watch:setup', 'build'], function() {
+  gulp.watch(config.source.assets + '/**/*', ['build:assets']);
+  gulp.watch(config.source.styles + '/**/*', ['build:styles']);
 });
 
 gulp.task('watch:setup', function() {

@@ -1,20 +1,19 @@
+'use strict';
+
+require('sugar');
 var config = require('./config');
+var webpackConfig = require('./webpack.config');
+var testFiles = config.source.scripts + '/**/*_test.js';
 
 module.exports = function(karmaConfig) {
-  karmaConfig.set({
-    frameworks: [
-      'mocha',
-      'chai',
-      'sinon-chai',
-      'browserify',
-      'detectBrowsers'
-    ],
-    files: ['client/tests/*-test.js'],
-    preprocessors: {'client/tests/*-test.js': ['browserify']},
-    browserify: {
-      transform: config.browserify.transforms,
-      watch: true,
-      debug: true
-    }
-  });
+  var options = {
+    autoWatch: true,
+    frameworks: ['mocha', 'chai', 'detectBrowsers'],
+    files: [testFiles],
+    preprocessors: {},
+    webpack: Object.reject(webpackConfig, 'context', 'entry', 'output')
+  };
+
+  options.preprocessors[testFiles] = ['webpack'];
+  karmaConfig.set(options);
 };

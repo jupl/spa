@@ -29,6 +29,5 @@ Thumbs.db
 # Project specific
 npm-debug.log
 node_modules/
-tmp/
-public/
+dist/
 bower_components/

@@ -2,13 +2,16 @@
 
 module.exports = {
   production: process.env.NODE_ENV === 'production',
-  paths: {
-    public: 'public'
+  port: parseInt(process.env.PORT) || 8000,
+  source: {
+    scripts: 'src/scripts',
+    styles: 'src/styles',
+    assets: 'src/assets'
   },
-  ports: {
-    server: process.env.PORT || 8000
-  },
-  browserify: {
-    transforms: ['envify', 'aliasify', 'debowerify']
+  destination: {
+    root: 'dist',
+    assets: 'dist',
+    scripts: 'dist/scripts',
+    styles: 'dist/styles'
   }
 };
