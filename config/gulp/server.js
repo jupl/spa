@@ -1,10 +1,9 @@
 'use strict';
 
-var Promise = require('bluebird');
 var gulp = require('gulp');
 var config = require('../../config');
 
-gulp.task('server', ['watch'], function() {
+gulp.task('server', ['watch'], function(callback) {
   var browserSync = require('browser-sync');
   var options = {
     ghostMode: config.environment.development,
@@ -20,9 +19,5 @@ gulp.task('server', ['watch'], function() {
     options.files = config.globs.public;
   }
 
-  return new Promise(function(resolve, reject) {
-    browserSync.init(null, options, function(err) {
-      !err ? resolve() : reject(err);
-    });
-  });
+  browserSync.init(null, options, done);
 });

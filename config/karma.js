@@ -1,21 +1,25 @@
 'use strict';
 
+var xtend = require('xtend');
 var config = require('../config');
 var webpack = require(config.paths.webpack);
 
 module.exports = function(karmaConfig) {
-  var newWebpack = Object.create(webpack);
+  var newWebpack = xtend({}, webpack, {
+    context: undefined,
+    entry: undefined,
+    output: undefined
+  });
   var options = {
     autoWatch: true,
+    browsers: ['PhantomJS'],
     frameworks: ['mocha', 'chai'],
     files: [config.globs.tests],
     preprocessors: {},
+    singleRun: !config.watch,
     webpack: newWebpack
   };
 
-  newWebpack.context = null;
-  newWebpack.entry = null;
-  newWebpack.output = null;
   options.preprocessors[config.globs.tests] = ['webpack'];
 
   karmaConfig.set(options);
