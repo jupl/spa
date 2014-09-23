@@ -7,11 +7,7 @@ var globs = {
 };
 
 var config = module.exports = {
-  get aliases() {
-    return {
-      '~': config.paths.source.scripts
-    };
-  },
+  aliases: {},
   environment: {
     value: (process.env.NODE_ENV || 'development').trim(),
     get development() { return this.value === 'development'; },

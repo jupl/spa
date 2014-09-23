@@ -13,14 +13,18 @@ gulp.task('build:scripts', function(callback) {
     if(err) {
       throw new util.PluginError('build:scripts', err);
     }
-    util.log(stats.toString({
-      assets: false,
-      chunks: false,
-      colors: chalk.supportsColor,
-      timings: false
-    }));
-    if(!callbackCalled) {
+    if(callbackCalled) {
+      util.log(stats.toString({
+        assets: false,
+        chunks: false,
+        colors: chalk.supportsColor,
+        reasons: false,
+        timings: false
+      }));
+    }
+    else {
       callbackCalled = true;
+      util.log(stats.toString({colors: chalk.supportsColor}));
       callback();
     }
   });
