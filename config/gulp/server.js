@@ -19,5 +19,5 @@ gulp.task('server', ['watch'], function(callback) {
     options.files = config.globs.public;
   }
 
-  browserSync.init(null, options, done);
+  browserSync.init(null, options, callback);
 });
