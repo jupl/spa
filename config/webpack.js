@@ -37,6 +37,7 @@ var options = module.exports = {
 if(config.environment.development) {
   options.debug = true;
   options.devtool = 'inline-source-map';
+  options.output.devtoolModuleFilenameTemplate = '[absolute-resource-path]';
 }
 else if(config.environment.production) {
   options.plugins = options.plugins || [];
