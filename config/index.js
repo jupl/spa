@@ -1,13 +1,16 @@
 'use strict';
 
 var path = require('path');
+var traceurLoader = require('traceur-loader');
 var globs = {
   assets: '**/?*.{html,txt}',
   images: '**/?*.{gif,jpeg,jpg,png,svg}'
 };
 
 var config = module.exports = {
-  aliases: {},
+  aliases: {
+    'traceur-runtime': traceurLoader.runtime
+  },
   environment: {
     value: (process.env.NODE_ENV || 'development').trim(),
     get development() { return this.value === 'development'; },
@@ -58,8 +61,7 @@ var config = module.exports = {
     propertyMethods: true,
     propertyNameShorthand: true,
     restParameters: true,
-    templateLiterals: true,
-    runtime: false
+    templateLiterals: true
   },
   uglify: {
     dropDebugger: true,

@@ -11,7 +11,7 @@
     "xtend": "^4.0.0",
     "webpack": "^1.4.2",
     "transform-loader": "^0.2.1",
-    "traceur-loader": "^0.5.0",
+    "traceur-loader": "^0.5.2",
     "gulp": "^3.8.6",
     "gulp-changed": "^1.0.0",
     "gulp-clone": "^1.0.0",
