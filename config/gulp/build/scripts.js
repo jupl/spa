@@ -18,8 +18,10 @@ gulp.task('build:scripts', function(callback) {
         assets: false,
         chunks: false,
         colors: chalk.supportsColor,
+        hash: false,
+        modules: false,
         reasons: false,
-        timings: false
+        source: false
       }));
     }
     else {
