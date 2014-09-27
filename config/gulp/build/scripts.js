@@ -2,8 +2,9 @@
 
 var chalk = require('chalk');
 var gulp = require('gulp');
-var webpack = require('webpack');
 var util = require('gulp-util');
+var webpack = require('webpack');
+var xtend = require('xtend');
 var config = require('../../../config');
 
 gulp.task('build:scripts', function(callback) {
