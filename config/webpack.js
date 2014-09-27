@@ -7,13 +7,18 @@ var webpack = require('webpack');
 var ResolverPlugin = webpack.ResolverPlugin;
 var DescPlugin = webpack.ResolverPlugin.DirectoryDescriptionFilePlugin;
 var config = require('../config');
+var commonChunk;
+var commonFile;
 var loaders = {
   envify: 'transform-loader/cacheable?envify',
   traceur: 'traceur-loader?' + qs.stringify(config.traceur)
 };
 
 var options = module.exports = {
-  entry: entries(),
+  entry: glob.sync(config.globs.scripts).reduce(function(obj, filename) {
+    obj[path.basename(filename, path.extname(filename))] = filename;
+    return obj;
+  }, {}),
   module: {
     loaders: [{
       test: /^(?!.*(bower_components|node_modules))+.+\.js$/,
@@ -45,19 +50,10 @@ else if(config.environment.production) {
   options.plugins.push(new webpack.optimize.OccurrenceOrderPlugin());
 }
 
-if(config.shared) {
+if(typeof config.shared === 'string') {
+  commonChunk = path.basename(config.shared, '.js');
+  commonFile = commonChunk + '.js';
   options.plugins = options.plugins || [];
-  options.plugins.push(new webpack.optimize.CommonsChunkPlugin('shared.js'));
-}
-
-function entries() {
-  return glob
-  .sync(config.globs.scripts)
-  .map(function(filename) {
-    return path.basename(filename, path.extname(filename));
-  })
-  .reduce(function(obj, name) {
-    obj[name] = name;
-    return obj;
-  }, {});
+  options.plugins.push(new webpack.optimize.CommonsChunkPlugin(commonChunk,
+                                                               commonFile));
 }
