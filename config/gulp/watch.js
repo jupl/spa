@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var config = require('../../config');
+config.watch = false;
 
 gulp.task('watch', ['watch:setup', 'build'], function() {
   gulp.watch(config.globs.assets, ['build:assets']);

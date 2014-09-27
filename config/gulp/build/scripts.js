@@ -8,10 +8,18 @@ var config = require('../../../config');
 
 gulp.task('build:scripts', function(callback) {
   var callbackCalled = false;
+  var compiler = webpack(require(config.paths.webpack));
 
-  webpack(require(config.paths.webpack), function(err, stats) {
-    if(err) {
-      throw new util.PluginError('build:scripts', err);
+  if(config.watch) {
+    compiler.watch(200, afterCompilation);
+  }
+  else {
+    compiler.run(afterCompilation);
+  }
+
+  function afterCompilation(error, stats) {
+    if(error) {
+      throw new util.PluginError('build:scripts', error);
     }
     if(callbackCalled) {
       util.log(stats.toString({
@@ -29,5 +37,5 @@ gulp.task('build:scripts', function(callback) {
       util.log(stats.toString({colors: chalk.supportsColor}));
       callback();
     }
-  });
+  }
 });

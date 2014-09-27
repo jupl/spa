@@ -16,11 +16,9 @@ module.exports = function(karmaConfig) {
     frameworks: ['mocha', 'chai'],
     files: [config.globs.tests],
     preprocessors: {},
-    singleRun: !config.watch,
     webpack: newWebpack
   };
 
   options.preprocessors[config.globs.tests] = ['webpack'];
-
   karmaConfig.set(options);
 };
