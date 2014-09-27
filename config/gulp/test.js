@@ -10,8 +10,7 @@ gulp.task('test', ['test:setup'], function(callback) {
     singleRun: !config.watch
   });
 
-  options.webpack.watch = config.watch;
-  karma.server.start(options);
+  karma.server.start(options, callback);
 });
 
 gulp.task('test:watch', ['watch:setup', 'test']);
