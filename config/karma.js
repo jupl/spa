@@ -10,7 +10,7 @@ var options = module.exports = {
   frameworks: ['mocha', 'chai'],
   files: [config.globs.tests],
   preprocessors: {},
-  webpack: xtend({}, webpack, {
+  webpack: xtend(webpack, {
     context: undefined,
     entry: undefined,
     output: undefined

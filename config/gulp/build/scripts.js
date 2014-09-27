@@ -11,13 +11,10 @@ gulp.task('build:scripts', function(callback) {
   var options = require(config.paths.karma);
 
   if(config.watch) {
-    options = xtend({}, options, {
-      watch: true,
-      watchDelay: 200
-    });
+    options = xtend(options, {watch: true});
   }
 
-  webpack(options, (error, stats) {
+  webpack(options, function(error, stats) {
     if(error) {
       throw new util.PluginError('build:scripts', error);
     }

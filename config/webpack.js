@@ -34,7 +34,8 @@ var options = module.exports = {
     alias: config.aliases,
     modulesDirectories: ['node_modules', 'bower_components'],
     root: config.paths.source.scripts
-  }
+  },
+  watchDelay: 200
 };
 
 if(config.environment.development) {
