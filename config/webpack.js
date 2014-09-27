@@ -7,8 +7,8 @@ var webpack = require('webpack');
 var ResolverPlugin = webpack.ResolverPlugin;
 var DescPlugin = webpack.ResolverPlugin.DirectoryDescriptionFilePlugin;
 var config = require('../config');
-var commonChunk;
-var commonFile;
+var commonsChunk;
+var commonsFile;
 var loaders = {
   envify: 'transform-loader/cacheable?envify',
   traceur: 'traceur-loader?' + qs.stringify(config.traceur)
@@ -50,10 +50,10 @@ else if(config.environment.production) {
   options.plugins.push(new webpack.optimize.OccurrenceOrderPlugin());
 }
 
-if(typeof config.shared === 'string') {
-  commonChunk = path.basename(config.shared, '.js');
-  commonFile = commonChunk + '.js';
+if(typeof config.commons === 'string') {
+  commonsChunk = path.basename(config.shared, '.js');
+  commonsFile = commonsChunk + '.js';
   options.plugins = options.plugins || [];
-  options.plugins.push(new webpack.optimize.CommonsChunkPlugin(commonChunk,
-                                                               commonFile));
+  options.plugins.push(new webpack.optimize.CommonsChunkPlugin(commonsChunk,
+                                                               commonsFile));
 }

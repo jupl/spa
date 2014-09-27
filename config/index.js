@@ -11,6 +11,7 @@ var config = module.exports = {
   aliases: {
     'traceur-runtime': traceurLoader.runtime
   },
+  commons: false,
   environment: {
     value: (process.env.NODE_ENV || 'development').trim(),
     get development() { return this.value === 'development'; },
@@ -51,7 +52,6 @@ var config = module.exports = {
   server: {
     port: parseInt(process.env.PORT, 10) || 8000
   },
-  shared: false,
   traceur: {
     arrowFunctions: true,
     blockBinding: true,
