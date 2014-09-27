@@ -9,7 +9,7 @@ var config = require('../../../config');
 
 gulp.task('build:scripts', function(callback) {
   var callbackCalled = false;
-  var options = require(config.paths.karma);
+  var options = require(config.paths.webpack);
 
   if(config.watch) {
     options = xtend(options, {watch: true});
