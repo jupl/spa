@@ -1,4 +1,7 @@
 'use strict';
 
 var config = require('./config');
-module.exports = require(config.paths.karma);
+
+module.exports = function(karmaConfig) {
+  karmaConfig.set(require(config.paths.karma));
+};

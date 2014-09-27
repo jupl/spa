@@ -1,20 +1,15 @@
 'use strict';
 
 var gulp = require('gulp');
+var xtend = require('xtend');
 var config = require('../../config');
 
 gulp.task('test', ['test:setup'], function(callback) {
   var karma = require('karma');
-  var karmaConfigRunner = require(config.paths.karma);
-  var options = {};
-  var karmaConfig = {
-    set: function(karmaOptions) {
-      options = karmaOptions;
-    }
-  };
+  var options = xtend({}, require(config.paths.karma), {
+    singleRun: !config.watch
+  });
 
-  karmaConfigRunner(karmaConfig);
-  options.singleRun = !config.watch;
   karma.server.start(options, callback);
 });
 
