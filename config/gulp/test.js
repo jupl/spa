@@ -13,8 +13,8 @@ gulp.task('test', ['test:setup'], function(callback) {
     }
   };
 
-  options.singleRun = !config.watch;
   karmaConfigRunner(karmaConfig);
+  options.singleRun = !config.watch;
   karma.server.start(options, callback);
 });
 
